@@ -1,0 +1,16 @@
+@WebApi_HostAddress = http://localhost:5078
+
+GET {{WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{WebApi_HostAddress}}/api/shorturl/
+Content-Type: application/json
+{
+  "url": "https://www.example.com"
+}
+
+###
+
+GET {{WebApi_HostAddress}}/api/ShortUrl
