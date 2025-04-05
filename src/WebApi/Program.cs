@@ -1,6 +1,8 @@
 using Application.UseCases;
 using Domain.Ports;
 using Infrastructure.Repositories;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 builder.Services.AddScoped<CreateShortUrlUseCase>();
+builder.Services.AddDbContext<ShortUrlDbContext>(options => options.UseInMemoryDatabase("shortUrls"));
 
 var app = builder.Build();
 

@@ -10,7 +10,7 @@ namespace Infrastructure.Repositories
 {
     public class ShortUrlRepository : IShortUrlRepository
     {
-        public Task<ShortUrl> CreateAsync(ShortUrl shortUrl)
+        public Task<ShortUrl> AddAsync(ShortUrl shortUrl)
         {
             throw new NotImplementedException();
         }

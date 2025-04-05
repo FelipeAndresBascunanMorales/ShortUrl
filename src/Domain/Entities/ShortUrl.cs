@@ -10,13 +10,15 @@ namespace Domain.Entities
     {
         public Guid Id { get; set; }
         public string OriginalUrl { get; set; }
-        public DateTime CreatedAt { get; set; }
         public string Code { get; set; } = string.Empty;
+        public string DteId { get; private set; }
+        public DateTime CreatedAt { get; set; }
 
-        public ShortUrl(string originalUrl, DateTime createdAt, string code)
+
+        public ShortUrl(string originalUrl, string code, string dteId, DateTime createdAt)
         {
 
-            if(string.IsNullOrWhiteSpace(originalUrl))
+            if (string.IsNullOrWhiteSpace(originalUrl))
             {
                 throw new ArgumentException("Original URL cannot be null or empty.", nameof(originalUrl));
             }
@@ -24,6 +26,7 @@ namespace Domain.Entities
             Id = Guid.NewGuid();
             OriginalUrl = originalUrl;
             Code = code;
+            DteId=dteId;
             CreatedAt = createdAt;
         }
     }

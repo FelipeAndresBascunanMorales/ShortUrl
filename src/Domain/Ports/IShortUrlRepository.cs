@@ -10,6 +10,6 @@ namespace Domain.Ports
     public interface IShortUrlRepository
     {
         Task<string> GetOriginalUrlAsync(string code);
-        Task<ShortUrl> CreateAsync(ShortUrl shortUrl);
+        Task<ShortUrl> AddAsync(ShortUrl shortUrl);
     }
 }

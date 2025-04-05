@@ -36,7 +36,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateShortUrlRequest createShortUrlRequest)
         {
-            await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest.Url);
+            await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest);
             return Ok();
         }
 
