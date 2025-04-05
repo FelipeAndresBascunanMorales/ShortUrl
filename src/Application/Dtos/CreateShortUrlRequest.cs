@@ -9,8 +9,8 @@ namespace Application.Dtos
     public class CreateShortUrlRequest
     {
 
-        public String Url { get; set; }
+        public String? Url { get; set; }
         public String? Code { get; set; }
-        public String DteId { get; set; }
+        public String? DteId { get; set; }
     }
 }

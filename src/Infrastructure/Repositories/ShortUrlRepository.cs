@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Ports;
+using Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,18 @@ namespace Infrastructure.Repositories
 {
     public class ShortUrlRepository : IShortUrlRepository
     {
-        public Task<ShortUrl> AddAsync(ShortUrl shortUrl)
+        private readonly ShortUrlDbContext _dbContext;
+        public ShortUrlRepository(ShortUrlDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+
+        public async Task<ShortUrl> AddAsync(ShortUrl shortUrl)
+        {
+            _dbContext.ShortUrls.Add(shortUrl);
+            await _dbContext.SaveChangesAsync();
+
+            return shortUrl;
         }
 
         public Task<string> GetOriginalUrlAsync(string code)

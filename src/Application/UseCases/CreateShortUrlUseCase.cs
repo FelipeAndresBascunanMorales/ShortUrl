@@ -26,6 +26,11 @@ namespace Application.UseCases
                 throw new ArgumentException("Original URL cannot be null or empty.", nameof(request.Url));
             }
 
+            if (string.IsNullOrWhiteSpace(request.DteId))
+            {
+                throw new ArgumentException("DTE ID cannot be null or empty.", nameof(request.DteId));
+            }
+
             // generate code with a service
             string code = Guid.NewGuid().ToString().Substring(0, 8);
 
