@@ -17,7 +17,6 @@ namespace Domain.Entities
 
         public ShortUrl(string originalUrl, string code, string dteId, DateTime createdAt)
         {
-
             if (string.IsNullOrWhiteSpace(originalUrl))
             {
                 throw new ArgumentException("Original URL cannot be null or empty.", nameof(originalUrl));

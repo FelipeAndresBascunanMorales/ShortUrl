@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.UseCases;
+using Domain.Ports;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -12,44 +13,60 @@ namespace WebApi.Controllers
     public class ShortUrlController : ControllerBase
     {
         private readonly CreateShortUrlUseCase _createShortUrlUseCase;
+        private readonly RedirectShortUrlUseCase _redirectShortUrlUseCase;
+        private readonly IShortUrlRepository _shortUrlRepository;
 
-        public ShortUrlController(CreateShortUrlUseCase createShortUrlUseCase)
+        public ShortUrlController(CreateShortUrlUseCase createShortUrlUseCase, RedirectShortUrlUseCase redirectShortUrlUseCase, IShortUrlRepository shortUrlRepository)
         {
             _createShortUrlUseCase = createShortUrlUseCase;
+            _redirectShortUrlUseCase = redirectShortUrlUseCase;
+            _shortUrlRepository=shortUrlRepository;
         }
 
         // GET: api/<ShortUrlController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> GetAsync()
         {
-            return new string[] { "value1", "value2" };
+            //get all short urls for testing only
+            var shortUrls = await _shortUrlRepository.GetAllAsync();
+            return Ok(shortUrls);
         }
 
+        //Once you have the code you are redirected to the DteDocument
         // GET api/<ShortUrlController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{code}")]
+        public async Task<IActionResult> GetAsync(string code)
         {
-            return "value";
-        }
+            //redirect to the original URL
+            try
+            {
+                var result = await _redirectShortUrlUseCase.ExecuteAsync(code);
 
+                if (result.Expired)
+                    return BadRequest("Short URL has expired or reached max uses");
+
+                return Redirect(result.Url);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+        }
+            
+        // generate a new Short Code to see a DteDocument
         // POST api/<ShortUrlController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateShortUrlRequest createShortUrlRequest)
         {
-            await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest);
-            return Ok();
-        }
-
-        // PUT api/<ShortUrlController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ShortUrlController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                var shortUrl = await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest);
+                return Ok(new { Code = shortUrl.Code });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

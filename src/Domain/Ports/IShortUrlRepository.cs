@@ -11,5 +11,8 @@ namespace Domain.Ports
     {
         Task<string> GetOriginalUrlAsync(string code);
         Task<ShortUrl> AddAsync(ShortUrl shortUrl);
+        Task<ShortUrl> GetByCodeAsync(string code);
+
+        Task<IEnumerable<ShortUrl>> GetAllAsync();
     }
 }

@@ -8,9 +8,11 @@ namespace Application.Dtos
 {
     public class CreateShortUrlRequest
     {
+        public required string DteId { get; set; }
+        public int? MaxUses { get; set; }
 
-        public String? Url { get; set; }
-        public String? Code { get; set; }
-        public String? DteId { get; set; }
+        // int or dateTime???
+        public int? ExpirationDate { get; set; }
+
     }
 }

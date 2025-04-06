@@ -17,6 +17,13 @@ namespace Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
+        //get all for testing only
+
+        public async Task<IEnumerable<ShortUrl>> GetAllAsync()
+        {
+            return await Task.FromResult(_dbContext.ShortUrls.ToList());
+        }
+
         public async Task<ShortUrl> AddAsync(ShortUrl shortUrl)
         {
             _dbContext.ShortUrls.Add(shortUrl);
@@ -25,9 +32,15 @@ namespace Infrastructure.Repositories
             return shortUrl;
         }
 
+        public async Task<ShortUrl?> GetByCodeAsync(string code)
+        {
+            return await Task.FromResult(_dbContext.ShortUrls.FirstOrDefault(x => x.Code == code));
+        }
+
         public Task<string> GetOriginalUrlAsync(string code)
         {
             throw new NotImplementedException();
         }
+
     }
 }

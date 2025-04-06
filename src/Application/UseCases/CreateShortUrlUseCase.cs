@@ -13,32 +13,40 @@ namespace Application.UseCases
     public class CreateShortUrlUseCase
     {
         private readonly IShortUrlRepository _shortUrlRepository;
+        private readonly IDteDocumentRepository _dteDocumentRepository;
 
-        public CreateShortUrlUseCase(IShortUrlRepository shortUrlRepository)
+        public CreateShortUrlUseCase(IShortUrlRepository shortUrlRepository, IDteDocumentRepository dteDocumentRepository)
         {
             _shortUrlRepository = shortUrlRepository;
+            _dteDocumentRepository = dteDocumentRepository;
         }
 
-        public async Task<string> ExecuteAsync(CreateShortUrlRequest request)
+        public async Task<ShortUrl> ExecuteAsync(CreateShortUrlRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Url))
-            {
-                throw new ArgumentException("Original URL cannot be null or empty.", nameof(request.Url));
-            }
-
             if (string.IsNullOrWhiteSpace(request.DteId))
             {
                 throw new ArgumentException("DTE ID cannot be null or empty.", nameof(request.DteId));
             }
 
+            if (!await _dteDocumentRepository.ExistAsync(request.DteId))
+            {
+                throw new ArgumentException($"DTE ID '{request.DteId}' does not exist.");
+            }
+
+
             // generate code with a service
             string code = Guid.NewGuid().ToString().Substring(0, 8);
 
-            var shortUrl = new ShortUrl(request.Url, code, request.DteId, DateTime.UtcNow);
-            await _shortUrlRepository.AddAsync(shortUrl);
+            var shortUrl = new ShortUrl(
+                originalUrl: $"/dte/{request.DteId}",
+                code: code,
+                dteId: request.DteId,
+                createdAt: DateTime.UtcNow
+                );
+            
+            var savedShortUrl = await _shortUrlRepository.AddAsync(shortUrl);
 
-            // todo: return the saved code or the entire object
-            return code;
+            return savedShortUrl;
         }
     }
 }
