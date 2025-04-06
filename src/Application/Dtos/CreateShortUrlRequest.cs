@@ -12,7 +12,7 @@ namespace Application.Dtos
         public int? MaxUses { get; set; }
 
         // int or dateTime???
-        public int? ExpirationDate { get; set; }
+        public int? ExpiresAt { get; set; }
 
     }
 }

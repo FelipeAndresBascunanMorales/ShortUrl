@@ -61,7 +61,7 @@ namespace WebApi.Controllers
             try
             {
                 var shortUrl = await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest);
-                return Ok(new { Code = shortUrl.Code });
+                return Ok(new { Code = shortUrl.EncodedUrl });
             }
             catch (Exception ex)
             {

@@ -39,12 +39,13 @@ namespace Application.UseCases
 
             var shortUrl = new ShortUrl(
                 originalUrl: $"/dte/{request.DteId}",
-                code: code,
+                encodedUrl: code,
                 dteId: request.DteId,
-                createdAt: DateTime.UtcNow
+                expiresAt: request.ExpiresAt.HasValue ? DateTime.UtcNow.AddMinutes(request.ExpiresAt.Value) : null,
+                maxUses: request.MaxUses.HasValue ? request.MaxUses.Value : null
                 );
             
-            var savedShortUrl = await _shortUrlRepository.AddAsync(shortUrl);
+            var savedShortUrl = await _shortUrlRepository.CreateAsync(shortUrl);
 
             return savedShortUrl;
         }

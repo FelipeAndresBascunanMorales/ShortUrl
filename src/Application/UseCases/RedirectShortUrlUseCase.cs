@@ -30,6 +30,23 @@ namespace Application.UseCases
             {
                 throw new KeyNotFoundException($"Short URL with code '{code}' not found.");
             }
+
+
+            if (!shortUrl.IsValid())
+            {
+                return (shortUrl.OriginalUrl, true);
+            }
+
+            shortUrl.IncrementAccessCount();
+
+
+            if (shortUrl.MaxUses.HasValue && shortUrl.AccessCount >= shortUrl.MaxUses.Value)
+            {
+                shortUrl.Deactivate();
+            }
+
+            await _shortUrlRepository.UpdateAsync(shortUrl);
+
             // Redirect to the original URL
             return (shortUrl.OriginalUrl, false);
         }
