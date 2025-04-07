@@ -26,23 +26,24 @@ namespace WebApi.Controllers
             _env = env;
         }
 
-        // GET: api/<ShortUrlController>
-        [HttpGet]
-        [EndpointSummary("Get all short URLs")]
-        [EndpointDescription("Retrieves all short URLs. This is for testing purposes only and should not be used in production.")]
-        [Authorize]
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAsync()
-        {
-            //go out if the environment is not development
-            if (!_env.IsDevelopment())
-            {
-                return BadRequest("This endpoint is only available in development mode.");
-            }
 
-            //get all short urls for testing only
-            var shortUrls = await _shortUrlRepository.GetAllAsync();
-            return Ok(shortUrls);
+        // generate a new Short Code to see a DteDocument
+        // POST api/<ShortUrlController>
+        [HttpPost]
+        [Authorize]
+        [EndpointSummary("Create a new short URL")]
+        [EndpointDescription("Create a new code that can be used to access a DteDocument")]
+        public async Task<IActionResult> Post([FromBody] CreateShortUrlRequest createShortUrlRequest)
+        {
+            try
+            {
+                var shortUrl = await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest);
+                return Ok(new { Code = shortUrl.EncodedUrl });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //Once you have the code you are redirected to the DteDocument
@@ -68,23 +69,24 @@ namespace WebApi.Controllers
                 return NotFound(new { Error = ex.Message });
             }
         }
-            
-        // generate a new Short Code to see a DteDocument
-        // POST api/<ShortUrlController>
-        [HttpPost]
-        [EndpointSummary("Create a new short URL")]
-        [EndpointDescription("Create a new code that can be used to access a DteDocument")]
-        public async Task<IActionResult> Post([FromBody] CreateShortUrlRequest createShortUrlRequest)
+
+
+        // GET: api/<ShortUrlController>
+        [EndpointSummary("Get all short URLs")]
+        [EndpointDescription("Retrieves all short URLs. This is for testing purposes only and is exposed only in development mode.")]
+        [Authorize]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAsync()
         {
-            try
+            //go out if the environment is not development
+            if (!_env.IsDevelopment())
             {
-                var shortUrl = await _createShortUrlUseCase.ExecuteAsync(createShortUrlRequest);
-                return Ok(new { Code = shortUrl.EncodedUrl });
+                return BadRequest("This endpoint is only available in development mode.");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            //get all short urls for testing only
+            var shortUrls = await _shortUrlRepository.GetAllAsync();
+            return Ok(shortUrls);
         }
     }
 }
