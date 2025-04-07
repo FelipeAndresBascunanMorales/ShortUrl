@@ -1,7 +1,12 @@
 @WebApi_HostAddress = http://localhost:5078
 
-GET {{WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+
+POST {{WebApi_HostAddress}}/api/shorturl/
+Content-Type: application/json
+{
+  "url": "https://www.example.com",
+  "DteId": "2"
+}
 
 ###
 
@@ -9,7 +14,7 @@ POST {{WebApi_HostAddress}}/api/shorturl/
 Content-Type: application/json
 {
   "url": "https://www.example.com",
-  "DteId": "Dte123456"
+  "DteId": "DteDoestExist12345"
 }
 
 ###
@@ -19,4 +24,14 @@ GET {{WebApi_HostAddress}}/api/ShortUrl
 
 ###
 
-GET {{WebApi_HostAddress}}/api/ShortUrl/9777ffc8
+GET {{WebApi_HostAddress}}/api/ShortUrl/60f63b30
+
+###
+
+POST {{WebApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
