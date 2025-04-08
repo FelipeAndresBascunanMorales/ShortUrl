@@ -57,7 +57,7 @@ graph TD
 - Manejo de expiración de URLs.
 - Límite de accesos configurables para cada URL corta.
 
-## Estructura del proyecto
+# Estructura del proyecto
 ```text
 /root
 ├── src/
@@ -78,7 +78,15 @@ graph TD
 | GET     | `/{code}`           | Redirección a URL original           | Pública          |
 | GET     | `/api/shorturl/all` | Retorna todos los codigos en memoria | JWT (dev only)   |
 
+# Pruebas en Entorno de Desarrollo
 
+Puedes probar la API directamente en nuestro entorno de Azure:
+
+🔗 [Interfaz Swagger para Pruebas](https://webapichallenge-gugve0degpdeguba.canadacentral-01.azurewebsites.net/swagger/index.html)
+
+
+
+# Pruebas en Entorno Local
 ## Requisitos Previos
 DOTNET 9 instalado en su sistema.
 Un editor de código como Visual Studio o Visual Studio Code.
