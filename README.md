@@ -103,7 +103,8 @@ Puedes probar la API directamente en nuestro entorno de Azure:
 ## Requisitos Previos
 DOTNET 9 instalado en su sistema.
 Un editor de código como Visual Studio o Visual Studio Code.
-Instalación:
+
+### Instalación:
 - Clonar este repositorio
 - Abrir el archivo sln en la carpeta principal (opcional)
 - Dirigirse a WebApi
@@ -114,3 +115,4 @@ Instalación:
   dotnet build
   dotnet run
   ```
+- Acceder al endpoint `/swagger.html` o ejecutar en orden las request del archivo `WebApi.http`
