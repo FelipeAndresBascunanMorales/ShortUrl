@@ -100,6 +100,12 @@ Puedes probar la API directamente en nuestro entorno de Azure:
 
 
 # Pruebas en Entorno Local
+
+> ℹ️ **Nota:** Use las siguientes credenciales para obtener el Json Web Token:  
+> - **Username:** `admin`  
+> - **Password:** `admin123`
+
+
 ## Requisitos Previos
 DOTNET 9 instalado en su sistema.
 Un editor de código como Visual Studio o Visual Studio Code.
