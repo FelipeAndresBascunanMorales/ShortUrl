@@ -54,7 +54,6 @@ namespace WebApi.Controllers
 
         //Once you have the code you are redirected to the DteDocument
         // GET api/<ShortUrlController>/5
-        [Authorize]
         [HttpGet("/{code}")]
         [EndpointSummary("Redirect to the original URL")]
         [EndpointDescription("Redirects to the original URL associated with the short code. If the short URL has expired or reached its max uses, an error message is returned.")]

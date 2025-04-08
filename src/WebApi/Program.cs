@@ -17,6 +17,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>() ?? throw new InvalidOperationException("JwtSettings configuration is missing.");
 
+// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllForTestPurpose", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 
@@ -53,10 +63,11 @@ builder.Services.AddOpenApi(options =>
 builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 builder.Services.AddScoped<IDteDocumentRepository, MockDteDocumentRepository>();
 builder.Services.AddScoped<IUserService, InMemoryUserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<LoginUseCase>();
 
 builder.Services.AddScoped<CreateShortUrlUseCase>();
 builder.Services.AddScoped<RedirectShortUrlUseCase>();
-builder.Services.AddScoped<LoginUseCase>();
 
 builder.Services.AddDbContext<ShortUrlDbContext>(options => options.UseInMemoryDatabase("shortUrls"));
 
@@ -65,20 +76,17 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 builder.Services.AddAuthorization();
-builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/openapi/v1.json", "ShorUrl v1");
-        });
-}
+app.MapGet("/", () => Results.Ok("Welcome to the ShortUrl API! Visit /swagger to explore the API documentation.")).ExcludeFromDescription();
+app.MapOpenApi();
+app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "ShorUrl v1");
+    });
 
+app.UseCors("AllowAllForTestPurpose");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -98,11 +98,15 @@ namespace Domain.Entities
                 return false;
 
             if (ExpiresAt.HasValue && DateTime.UtcNow > ExpiresAt.Value)
+            {
+                Deactivate();
                 return false;
-
+            }
             if (MaxUses.HasValue && AccessCount >= MaxUses.Value)
+            {
+                Deactivate();
                 return false;
-
+            }
             return true;
         }
 

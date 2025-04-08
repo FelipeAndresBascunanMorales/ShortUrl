@@ -20,18 +20,30 @@ namespace Application.UseCases
 
         public async Task<LoginResponse> ExecuteAsync(string username, string password)
         {
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentException("Username cannot be null or empty.", nameof(username));
+            }
+
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("Password cannot be null or empty.", nameof(password));
+            }
+
             var user = await _userService.GetUserByUsernameAsync(username);
-            if (user == null || user.Password != password)
+            if (user == null || !await _userService.VerifyPasswordAsync(user, password))
             {
                 return new LoginResponse
                 {
                     Autenticated = false,
-                    Token = "",
+                    Token = string.Empty,
                 };
             }
 
             // Generate JWT token
             var token = _jwtService.GenerateToken(user);
+
             // Set token expiration
             var expiration = DateTime.UtcNow.AddMinutes(30); // Example expiration time
 

@@ -29,5 +29,10 @@ namespace Infrastructure.Services
             var user = _users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
             return Task.FromResult(user);
         }
+
+        public Task<bool> VerifyPasswordAsync(User user, string password)
+        {
+            return Task.FromResult(user.Password == password);
+        }
     }
 }

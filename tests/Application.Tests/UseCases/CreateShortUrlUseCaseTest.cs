@@ -61,5 +61,75 @@ namespace Application.Tests.UseCases
             Assert.IsType<string>(result.EncodedUrl);
             mockShortUrlRepo.Verify(x => x.CreateAsync(It.IsAny<ShortUrl>()), Times.Once);
         }
+
+        [Fact]
+        public void ShortUrl_Should_BeInvalid_When_MaxUsesReached()
+        {
+            // Arrange
+            var shortUrl = new ShortUrl("dte/1", "abc123", "1", maxUses: 3);
+            shortUrl.IncrementAccessCount();
+            shortUrl.IncrementAccessCount();
+            shortUrl.IncrementAccessCount();
+
+            // Act
+            var isValid = shortUrl.IsValid();
+
+            // Assert
+            Assert.False(isValid);
+            Assert.False(shortUrl.IsActive);
+        }
+
+        [Fact]
+        public void ShortUrl_Should_BeInvalid_When_Expired()
+        {
+            // Arrange
+            var shortUrl = new ShortUrl("dte/1", "abc123", "1", expiresAt: DateTime.UtcNow.AddMinutes(-1));
+
+            // Act
+            var isValid = shortUrl.IsValid();
+
+            // Assert
+            Assert.False(isValid);
+            Assert.False(shortUrl.IsActive);
+        }
+
+        [Fact]
+        public void IncrementAccessCount_Should_Deactivate_When_MaxUsesReached()
+        {
+            // Arrange
+            var shortUrl = new ShortUrl("dte/1", "abc123", "1", maxUses: 2);
+            shortUrl.IncrementAccessCount();
+
+            // Act
+            shortUrl.IncrementAccessCount();
+
+            // Assert
+            Assert.Equal(2, shortUrl.AccessCount);
+            Assert.False(shortUrl.IsActive);
+        }
+
+        [Fact]
+        public void IsValid_Should_ReturnTrue_When_ActiveAndNotExpired()
+        {
+            // Arrange
+            var shortUrl = new ShortUrl("dte/1", "abc123", "1", expiresAt: DateTime.UtcNow.AddMinutes(10));
+
+            // Act
+            var isValid = shortUrl.IsValid();
+
+            // Assert
+            Assert.True(isValid);
+            Assert.True(shortUrl.IsActive);
+        }
+
+        [Fact]
+        public void ShortUrl_Constructor_Should_ThrowException_When_OriginalUrlOrDteIdIsNullOrEmpty()
+        {
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => new ShortUrl(string.Empty, "abc123", "1"));
+            Assert.Throws<ArgumentException>(() => new ShortUrl("dte/1", "abc123", string.Empty));
+            Assert.Throws<ArgumentException>(() => new ShortUrl("", "abc123", "1"));
+            Assert.Throws<ArgumentException>(() => new ShortUrl("dte/1", "abc123", ""));
+        }
     }
 }

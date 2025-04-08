@@ -10,5 +10,6 @@ namespace Domain.Ports
     public interface IUserService
     {
         Task<User?> GetUserByUsernameAsync(string username);
+        Task<bool> VerifyPasswordAsync(User user, string password);
     }
 }
