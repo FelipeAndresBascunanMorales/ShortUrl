@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.UseCases;
 using Domain.Config;
 using Domain.Entities;
 using Domain.Ports;
@@ -11,57 +12,25 @@ namespace WebApi.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IJwtService _jwtService;
-        private readonly JwtSettings _jwtSettings;
+        private readonly LoginUseCase _loginUseCase;
 
-        public AuthController(IJwtService jwtService, JwtSettings jwtSettings)
+        public AuthController(LoginUseCase loginUseCase)
         {
-            _jwtService = jwtService;
-            _jwtSettings = jwtSettings;
+            _loginUseCase = loginUseCase;
         }
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-           // this is Homer Simpson eating a hotdog in the secret bunker of Mr Burns
-            var user = AuthenticateUser(request.Username, request.Password);
-
-            if (user == null)
+            var response = _loginUseCase.ExecuteAsync(request.Username, request.Password).Result;
+            if (response.Autenticated)
+            {
+                return Ok(response);
+            }
+            else
+            {
                 return Unauthorized();
-
-            var token = _jwtService.GenerateToken(user);
-
-            return Ok(new
-            {
-                Token = token,
-                ExpiresIn = _jwtSettings.ExpirationMinutes * 60
-            });
-        }
-
-        private User? AuthenticateUser(string username, string password)
-        {
-            // Replace with real user validation in production
-            if (username == "admin" && password == "admin123")
-            {
-                return new User
-                {
-                    Id = "1",
-                    Username = "admin",
-                    Role = "Admin"
-                };
             }
-
-            if (username == "user" && password == "user123")
-            {
-                return new User
-                {
-                    Id = "2",
-                    Username = "user",
-                    Role = "User"
-                };
-            }
-
-            return null;
         }
     }
 }

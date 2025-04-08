@@ -41,7 +41,7 @@ namespace Application.UseCases
                 originalUrl: $"/dte/{request.DteId}",
                 encodedUrl: code,
                 dteId: request.DteId,
-                expiresAt: request.ExpiresAt.HasValue ? DateTime.UtcNow.AddMinutes(request.ExpiresAt.Value) : null,
+                expiresAt: request.DurationInMinutes.HasValue ? DateTime.UtcNow.AddMinutes(request.DurationInMinutes.Value) : null,
                 maxUses: request.MaxUses.HasValue ? request.MaxUses.Value : null
                 );
             

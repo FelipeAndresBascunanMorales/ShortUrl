@@ -1,4 +1,6 @@
 @WebApi_HostAddress = https://localhost:7194
+@WebApi_HostAddress_Http = http://localhost:5078
+
 
 // @name login
 POST {{WebApi_HostAddress}}/api/auth/login/

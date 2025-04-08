@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
+    // / <summary>
+    // / Represents a DTE (Documento Tributario Electrónico) document.
+    // / It's in spanglish because it's based on the SII (Servicio de Impuestos Internos) WS's response.
+    // / </summary>
     public class DteDocument
     {
         public string Id { get; set; }

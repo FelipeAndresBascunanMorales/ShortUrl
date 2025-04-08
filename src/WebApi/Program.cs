@@ -52,9 +52,11 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.AddScoped<IShortUrlRepository, ShortUrlRepository>();
 builder.Services.AddScoped<IDteDocumentRepository, MockDteDocumentRepository>();
+builder.Services.AddScoped<IUserService, InMemoryUserService>();
 
 builder.Services.AddScoped<CreateShortUrlUseCase>();
 builder.Services.AddScoped<RedirectShortUrlUseCase>();
+builder.Services.AddScoped<LoginUseCase>();
 
 builder.Services.AddDbContext<ShortUrlDbContext>(options => options.UseInMemoryDatabase("shortUrls"));
 

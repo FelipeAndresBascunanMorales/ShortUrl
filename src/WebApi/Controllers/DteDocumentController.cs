@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Ports;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Serialization;
 

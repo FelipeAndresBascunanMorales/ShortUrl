@@ -34,6 +34,7 @@ namespace Application.UseCases
 
             if (!shortUrl.IsValid())
             {
+                shortUrl.Deactivate();
                 return (shortUrl.OriginalUrl, true);
             }
 
