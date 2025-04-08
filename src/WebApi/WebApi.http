@@ -43,11 +43,11 @@ Authorization: Bearer {{login.response.body.$.token}}
 
 ###
 
-GET {{WebApi_HostAddress}}/api/ShortUrl/{{generatedCode.response.body.$.code}}
+GET {{WebApi_HostAddress}}/{{generatedCode.response.body.$.code}}
 
 ###
 
-GET {{WebApi_HostAddress}}/api/ShortUrl/{{generatedCode.response.body.$.code}}
+GET {{WebApi_HostAddress}}/{{generatedCode.response.body.$.code}}
 accept: */*
 Authorization: Bearer {{login.response.body.$.token}}
 
