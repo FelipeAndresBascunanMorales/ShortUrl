@@ -2,6 +2,15 @@
 Este proyecto es una aplicación para acortar URLs, gestionar su ciclo de vida y redirigir a los usuarios a las URLs originales.
 Esto es una prueba de conceptos para demostrar una implementación de arquitectura hexagonal.
 
+
+### ¿Por qué Arquitectura Hexagonal?
+Esta implementación utiliza arquitectura hexagonal (también llamada "puertos y adaptadores") porque:
+
+- **Desacoplamiento**: El núcleo de negocio (dominio) no depende de tecnologías externas
+- **Testabilidad**: Permite probar la lógica de negocio sin infraestructura
+- **Flexibilidad**: Se pueden cambiar bases de datos u otro servicio sin afectar el dominio
+- **Enfoque DTE**: Ideal para integraciones con sistemas de terceros como el WS de SII
+  
 ## Diagrama 
 
 ```mermaid
@@ -57,6 +66,10 @@ graph TD
 - Manejo de expiración de URLs.
 - Límite de accesos configurables para cada URL corta.
 
+## Seguridad Implementada
+- **JWT** Tokens firmados con HS256 para autenticación stateless
+- Control de expiración de JWT token en archivo de configuración externo al código
+
 # Estructura del proyecto
 ```text
 /root
@@ -94,6 +107,7 @@ Instalación:
 - Clonar este repositorio
 - Abrir el archivo sln en la carpeta principal (opcional)
 - Dirigirse a WebApi
+- reemplazar el nombre del archivo `appsettings.example.json` por `appsettings.json`
 - En la carpeta WebApi ejecutar el siguiente comando
   
   ```
